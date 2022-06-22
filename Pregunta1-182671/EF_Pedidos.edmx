@@ -1,0 +1,574 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PedidosClientesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Artículos">
+          <Key>
+            <PropertyRef Name="IdArt" />
+          </Key>
+          <Property Name="IdArt" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="30" />
+          <Property Name="Precio" Type="money" />
+          <Property Name="CantAct" Type="int" />
+          <Property Name="CantMin" Type="int" />
+          <Property Name="CantPedir" Type="int" />
+        </EntityType>
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="RFC" />
+          </Key>
+          <Property Name="RFC" Type="char" MaxLength="13" Nullable="false" />
+          <Property Name="Domicilio" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Detalle">
+          <Key>
+            <PropertyRef Name="FolioP" />
+            <PropertyRef Name="IdArt" />
+          </Key>
+          <Property Name="FolioP" Type="int" Nullable="false" />
+          <Property Name="IdArt" Type="int" Nullable="false" />
+          <Property Name="CantPed" Type="int" />
+          <Property Name="CantEnt" Type="int" />
+        </EntityType>
+        <EntityType Name="Empleados">
+          <Key>
+            <PropertyRef Name="RFC" />
+          </Key>
+          <Property Name="RFC" Type="char" MaxLength="13" Nullable="false" />
+          <Property Name="Categoría" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Pagos">
+          <Key>
+            <PropertyRef Name="FolioP" />
+            <PropertyRef Name="IdPago" />
+          </Key>
+          <Property Name="FolioP" Type="int" Nullable="false" />
+          <Property Name="IdPago" Type="int" Nullable="false" />
+          <Property Name="Fecha" Type="date" />
+          <Property Name="Monto" Type="money" />
+        </EntityType>
+        <EntityType Name="Pedidos">
+          <Key>
+            <PropertyRef Name="FolioP" />
+          </Key>
+          <Property Name="FolioP" Type="int" Nullable="false" />
+          <Property Name="FechaPed" Type="date" />
+          <Property Name="FechaFin" Type="date" />
+          <Property Name="Monto" Type="money" />
+          <Property Name="SaldoCli" Type="money" />
+          <Property Name="SaldoFacs" Type="money" />
+          <Property Name="RFCC" Type="char" MaxLength="13" Nullable="false" />
+          <Property Name="RFCE" Type="char" MaxLength="13" />
+        </EntityType>
+        <EntityType Name="ReAbast">
+          <Key>
+            <PropertyRef Name="FolioR" />
+          </Key>
+          <Property Name="FolioR" Type="int" Nullable="false" />
+          <Property Name="Cant" Type="int" />
+          <Property Name="Monto" Type="money" />
+          <Property Name="FechaPed" Type="date" />
+          <Property Name="FechaEnt" Type="date" />
+          <Property Name="IdArt" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="Rfc" />
+          </Key>
+          <Property Name="Rfc" Type="char" MaxLength="13" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="30" />
+          <Property Name="Passw" Type="varchar" MaxLength="15" />
+          <Property Name="Tipo" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK__Clientes__RFC__182C9B23">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Rfc" />
+            </Principal>
+            <Dependent Role="Clientes">
+              <PropertyRef Name="RFC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Detalle__FolioP__21B6055D">
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="1" />
+          <End Role="Detalle" Type="Self.Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedidos">
+              <PropertyRef Name="FolioP" />
+            </Principal>
+            <Dependent Role="Detalle">
+              <PropertyRef Name="FolioP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Detalle__IdArt__22AA2996">
+          <End Role="Artículos" Type="Self.Artículos" Multiplicity="1" />
+          <End Role="Detalle" Type="Self.Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artículos">
+              <PropertyRef Name="IdArt" />
+            </Principal>
+            <Dependent Role="Detalle">
+              <PropertyRef Name="IdArt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Empleados__RFC__1B0907CE">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Empleados" Type="Self.Empleados" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Rfc" />
+            </Principal>
+            <Dependent Role="Empleados">
+              <PropertyRef Name="RFC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pagos__FolioP__25869641">
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="1" />
+          <End Role="Pagos" Type="Self.Pagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedidos">
+              <PropertyRef Name="FolioP" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="FolioP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pedidos__RFCC__1DE57479">
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="RFC" />
+            </Principal>
+            <Dependent Role="Pedidos">
+              <PropertyRef Name="RFCC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pedidos__RFCE__1ED998B2">
+          <End Role="Empleados" Type="Self.Empleados" Multiplicity="0..1" />
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empleados">
+              <PropertyRef Name="RFC" />
+            </Principal>
+            <Dependent Role="Pedidos">
+              <PropertyRef Name="RFCE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReAbast__IdArt__1273C1CD">
+          <End Role="Artículos" Type="Self.Artículos" Multiplicity="1" />
+          <End Role="ReAbast" Type="Self.ReAbast" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artículos">
+              <PropertyRef Name="IdArt" />
+            </Principal>
+            <Dependent Role="ReAbast">
+              <PropertyRef Name="IdArt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PedidosClientesModelStoreContainer">
+          <EntitySet Name="Artículos" EntityType="Self.Artículos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Detalle" EntityType="Self.Detalle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Empleados" EntityType="Self.Empleados" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pagos" EntityType="Self.Pagos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pedidos" EntityType="Self.Pedidos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReAbast" EntityType="Self.ReAbast" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Clientes__RFC__182C9B23" Association="Self.FK__Clientes__RFC__182C9B23">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Clientes" EntitySet="Clientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Detalle__FolioP__21B6055D" Association="Self.FK__Detalle__FolioP__21B6055D">
+            <End Role="Pedidos" EntitySet="Pedidos" />
+            <End Role="Detalle" EntitySet="Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Detalle__IdArt__22AA2996" Association="Self.FK__Detalle__IdArt__22AA2996">
+            <End Role="Artículos" EntitySet="Artículos" />
+            <End Role="Detalle" EntitySet="Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Empleados__RFC__1B0907CE" Association="Self.FK__Empleados__RFC__1B0907CE">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Empleados" EntitySet="Empleados" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pagos__FolioP__25869641" Association="Self.FK__Pagos__FolioP__25869641">
+            <End Role="Pedidos" EntitySet="Pedidos" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pedidos__RFCC__1DE57479" Association="Self.FK__Pedidos__RFCC__1DE57479">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Pedidos" EntitySet="Pedidos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pedidos__RFCE__1ED998B2" Association="Self.FK__Pedidos__RFCE__1ED998B2">
+            <End Role="Empleados" EntitySet="Empleados" />
+            <End Role="Pedidos" EntitySet="Pedidos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReAbast__IdArt__1273C1CD" Association="Self.FK__ReAbast__IdArt__1273C1CD">
+            <End Role="Artículos" EntitySet="Artículos" />
+            <End Role="ReAbast" EntitySet="ReAbast" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PedidosClientesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Artículos">
+          <Key>
+            <PropertyRef Name="IdArt" />
+          </Key>
+          <Property Name="IdArt" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Precio" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CantAct" Type="Int32" />
+          <Property Name="CantMin" Type="Int32" />
+          <Property Name="CantPedir" Type="Int32" />
+          <NavigationProperty Name="Detalle" Relationship="Self.FK__Detalle__IdArt__22AA2996" FromRole="Artículos" ToRole="Detalle" />
+          <NavigationProperty Name="ReAbast" Relationship="Self.FK__ReAbast__IdArt__1273C1CD" FromRole="Artículos" ToRole="ReAbast" />
+        </EntityType>
+        <EntityType Name="Clientes">
+          <Key>
+            <PropertyRef Name="RFC" />
+          </Key>
+          <Property Name="RFC" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Domicilio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK__Clientes__RFC__182C9B23" FromRole="Clientes" ToRole="Usuarios" />
+          <NavigationProperty Name="Pedidos" Relationship="Self.FK__Pedidos__RFCC__1DE57479" FromRole="Clientes" ToRole="Pedidos" />
+        </EntityType>
+        <EntityType Name="Detalle">
+          <Key>
+            <PropertyRef Name="FolioP" />
+            <PropertyRef Name="IdArt" />
+          </Key>
+          <Property Name="FolioP" Type="Int32" Nullable="false" />
+          <Property Name="IdArt" Type="Int32" Nullable="false" />
+          <Property Name="CantPed" Type="Int32" />
+          <Property Name="CantEnt" Type="Int32" />
+          <NavigationProperty Name="Artículos" Relationship="Self.FK__Detalle__IdArt__22AA2996" FromRole="Detalle" ToRole="Artículos" />
+          <NavigationProperty Name="Pedidos" Relationship="Self.FK__Detalle__FolioP__21B6055D" FromRole="Detalle" ToRole="Pedidos" />
+        </EntityType>
+        <EntityType Name="Empleados">
+          <Key>
+            <PropertyRef Name="RFC" />
+          </Key>
+          <Property Name="RFC" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Categoría" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK__Empleados__RFC__1B0907CE" FromRole="Empleados" ToRole="Usuarios" />
+          <NavigationProperty Name="Pedidos" Relationship="Self.FK__Pedidos__RFCE__1ED998B2" FromRole="Empleados" ToRole="Pedidos" />
+        </EntityType>
+        <EntityType Name="Pagos">
+          <Key>
+            <PropertyRef Name="FolioP" />
+            <PropertyRef Name="IdPago" />
+          </Key>
+          <Property Name="FolioP" Type="Int32" Nullable="false" />
+          <Property Name="IdPago" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Precision="0" />
+          <Property Name="Monto" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Pedidos" Relationship="Self.FK__Pagos__FolioP__25869641" FromRole="Pagos" ToRole="Pedidos" />
+        </EntityType>
+        <EntityType Name="Pedidos">
+          <Key>
+            <PropertyRef Name="FolioP" />
+          </Key>
+          <Property Name="FolioP" Type="Int32" Nullable="false" />
+          <Property Name="FechaPed" Type="DateTime" Precision="0" />
+          <Property Name="FechaFin" Type="DateTime" Precision="0" />
+          <Property Name="Monto" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="SaldoCli" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="SaldoFacs" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="RFCC" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="RFCE" Type="String" MaxLength="13" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Clientes" Relationship="Self.FK__Pedidos__RFCC__1DE57479" FromRole="Pedidos" ToRole="Clientes" />
+          <NavigationProperty Name="Detalle" Relationship="Self.FK__Detalle__FolioP__21B6055D" FromRole="Pedidos" ToRole="Detalle" />
+          <NavigationProperty Name="Empleados" Relationship="Self.FK__Pedidos__RFCE__1ED998B2" FromRole="Pedidos" ToRole="Empleados" />
+          <NavigationProperty Name="Pagos" Relationship="Self.FK__Pagos__FolioP__25869641" FromRole="Pedidos" ToRole="Pagos" />
+        </EntityType>
+        <EntityType Name="ReAbast">
+          <Key>
+            <PropertyRef Name="FolioR" />
+          </Key>
+          <Property Name="FolioR" Type="Int32" Nullable="false" />
+          <Property Name="Cant" Type="Int32" />
+          <Property Name="Monto" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="FechaPed" Type="DateTime" Precision="0" />
+          <Property Name="FechaEnt" Type="DateTime" Precision="0" />
+          <Property Name="IdArt" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Artículos" Relationship="Self.FK__ReAbast__IdArt__1273C1CD" FromRole="ReAbast" ToRole="Artículos" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="Rfc" />
+          </Key>
+          <Property Name="Rfc" Type="String" MaxLength="13" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Passw" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Tipo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Clientes" Relationship="Self.FK__Clientes__RFC__182C9B23" FromRole="Usuarios" ToRole="Clientes" />
+          <NavigationProperty Name="Empleados" Relationship="Self.FK__Empleados__RFC__1B0907CE" FromRole="Usuarios" ToRole="Empleados" />
+        </EntityType>
+        <Association Name="FK__Detalle__IdArt__22AA2996">
+          <End Role="Artículos" Type="Self.Artículos" Multiplicity="1" />
+          <End Role="Detalle" Type="Self.Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artículos">
+              <PropertyRef Name="IdArt" />
+            </Principal>
+            <Dependent Role="Detalle">
+              <PropertyRef Name="IdArt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ReAbast__IdArt__1273C1CD">
+          <End Role="Artículos" Type="Self.Artículos" Multiplicity="1" />
+          <End Role="ReAbast" Type="Self.ReAbast" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artículos">
+              <PropertyRef Name="IdArt" />
+            </Principal>
+            <Dependent Role="ReAbast">
+              <PropertyRef Name="IdArt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Clientes__RFC__182C9B23">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Rfc" />
+            </Principal>
+            <Dependent Role="Clientes">
+              <PropertyRef Name="RFC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pedidos__RFCC__1DE57479">
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clientes">
+              <PropertyRef Name="RFC" />
+            </Principal>
+            <Dependent Role="Pedidos">
+              <PropertyRef Name="RFCC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Detalle__FolioP__21B6055D">
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="1" />
+          <End Role="Detalle" Type="Self.Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedidos">
+              <PropertyRef Name="FolioP" />
+            </Principal>
+            <Dependent Role="Detalle">
+              <PropertyRef Name="FolioP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Empleados__RFC__1B0907CE">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Empleados" Type="Self.Empleados" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Rfc" />
+            </Principal>
+            <Dependent Role="Empleados">
+              <PropertyRef Name="RFC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pedidos__RFCE__1ED998B2">
+          <End Role="Empleados" Type="Self.Empleados" Multiplicity="0..1" />
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Empleados">
+              <PropertyRef Name="RFC" />
+            </Principal>
+            <Dependent Role="Pedidos">
+              <PropertyRef Name="RFCE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pagos__FolioP__25869641">
+          <End Role="Pedidos" Type="Self.Pedidos" Multiplicity="1" />
+          <End Role="Pagos" Type="Self.Pagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedidos">
+              <PropertyRef Name="FolioP" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="FolioP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PedidosClientesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Artículos" EntityType="Self.Artículos" />
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" />
+          <EntitySet Name="Detalle" EntityType="Self.Detalle" />
+          <EntitySet Name="Empleados" EntityType="Self.Empleados" />
+          <EntitySet Name="Pagos" EntityType="Self.Pagos" />
+          <EntitySet Name="Pedidos" EntityType="Self.Pedidos" />
+          <EntitySet Name="ReAbast" EntityType="Self.ReAbast" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+          <AssociationSet Name="FK__Detalle__IdArt__22AA2996" Association="Self.FK__Detalle__IdArt__22AA2996">
+            <End Role="Artículos" EntitySet="Artículos" />
+            <End Role="Detalle" EntitySet="Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ReAbast__IdArt__1273C1CD" Association="Self.FK__ReAbast__IdArt__1273C1CD">
+            <End Role="Artículos" EntitySet="Artículos" />
+            <End Role="ReAbast" EntitySet="ReAbast" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Clientes__RFC__182C9B23" Association="Self.FK__Clientes__RFC__182C9B23">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Clientes" EntitySet="Clientes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pedidos__RFCC__1DE57479" Association="Self.FK__Pedidos__RFCC__1DE57479">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Pedidos" EntitySet="Pedidos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Detalle__FolioP__21B6055D" Association="Self.FK__Detalle__FolioP__21B6055D">
+            <End Role="Pedidos" EntitySet="Pedidos" />
+            <End Role="Detalle" EntitySet="Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Empleados__RFC__1B0907CE" Association="Self.FK__Empleados__RFC__1B0907CE">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Empleados" EntitySet="Empleados" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pedidos__RFCE__1ED998B2" Association="Self.FK__Pedidos__RFCE__1ED998B2">
+            <End Role="Empleados" EntitySet="Empleados" />
+            <End Role="Pedidos" EntitySet="Pedidos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pagos__FolioP__25869641" Association="Self.FK__Pagos__FolioP__25869641">
+            <End Role="Pedidos" EntitySet="Pedidos" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PedidosClientesModelStoreContainer" CdmEntityContainer="PedidosClientesEntities">
+          <EntitySetMapping Name="Artículos">
+            <EntityTypeMapping TypeName="PedidosClientesModel.Artículos">
+              <MappingFragment StoreEntitySet="Artículos">
+                <ScalarProperty Name="IdArt" ColumnName="IdArt" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="CantAct" ColumnName="CantAct" />
+                <ScalarProperty Name="CantMin" ColumnName="CantMin" />
+                <ScalarProperty Name="CantPedir" ColumnName="CantPedir" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clientes">
+            <EntityTypeMapping TypeName="PedidosClientesModel.Clientes">
+              <MappingFragment StoreEntitySet="Clientes">
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="Domicilio" ColumnName="Domicilio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Detalle">
+            <EntityTypeMapping TypeName="PedidosClientesModel.Detalle">
+              <MappingFragment StoreEntitySet="Detalle">
+                <ScalarProperty Name="FolioP" ColumnName="FolioP" />
+                <ScalarProperty Name="IdArt" ColumnName="IdArt" />
+                <ScalarProperty Name="CantPed" ColumnName="CantPed" />
+                <ScalarProperty Name="CantEnt" ColumnName="CantEnt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Empleados">
+            <EntityTypeMapping TypeName="PedidosClientesModel.Empleados">
+              <MappingFragment StoreEntitySet="Empleados">
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="Categoría" ColumnName="Categoría" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pagos">
+            <EntityTypeMapping TypeName="PedidosClientesModel.Pagos">
+              <MappingFragment StoreEntitySet="Pagos">
+                <ScalarProperty Name="FolioP" ColumnName="FolioP" />
+                <ScalarProperty Name="IdPago" ColumnName="IdPago" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pedidos">
+            <EntityTypeMapping TypeName="PedidosClientesModel.Pedidos">
+              <MappingFragment StoreEntitySet="Pedidos">
+                <ScalarProperty Name="FolioP" ColumnName="FolioP" />
+                <ScalarProperty Name="FechaPed" ColumnName="FechaPed" />
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="SaldoCli" ColumnName="SaldoCli" />
+                <ScalarProperty Name="SaldoFacs" ColumnName="SaldoFacs" />
+                <ScalarProperty Name="RFCC" ColumnName="RFCC" />
+                <ScalarProperty Name="RFCE" ColumnName="RFCE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReAbast">
+            <EntityTypeMapping TypeName="PedidosClientesModel.ReAbast">
+              <MappingFragment StoreEntitySet="ReAbast">
+                <ScalarProperty Name="FolioR" ColumnName="FolioR" />
+                <ScalarProperty Name="Cant" ColumnName="Cant" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="FechaPed" ColumnName="FechaPed" />
+                <ScalarProperty Name="FechaEnt" ColumnName="FechaEnt" />
+                <ScalarProperty Name="IdArt" ColumnName="IdArt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="PedidosClientesModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="Rfc" ColumnName="Rfc" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Passw" ColumnName="Passw" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

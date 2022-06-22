@@ -1,0 +1,59 @@
+-- Script para actualizar las fechas de la base de datos de AdventureWorksDW.
+-- NOTA: EJECUTAR UN UPDATE A LA VEZ.
+
+
+use AdventureWorksDW
+
+
+-- Actualiza la(s) fecha(s) de DimTime.
+update DimTime
+set FullDateAlternateKey= FullDateAlternateKey + 5691
+
+-- (1158 filas afectadas)
+
+update DimTime
+set DayNumberOfMonth= day(FullDateAlternateKey),
+	SpanishMonthName=DATENAME(mm, FullDateAlternateKey),
+	MonthNumberOfYear=MONTH(FullDateAlternateKey),
+	CalendarQuarter= (MONTH(FullDateAlternateKey)-1)/3+1,
+	CalendarYear= year(FullDateAlternateKey),
+	CalendarSemester= (MONTH(FullDateAlternateKey)-1)/6+1,
+	FiscalYear= year(FullDateAlternateKey)+1
+
+-- (1158 filas afectadas)
+
+
+-- Actualiza la(s) fecha(s) de DimCustomer.
+update DimCustomer
+set BirthDate= BirthDate + 5691,
+    DateFirstPurchase= DateFirstPurchase + 5691
+
+-- (18484 filas afectadas)
+
+
+-- Actualiza la(s) fecha(s) de DimEmployee.
+update DimEmployee
+set HireDate= HireDate + 5691,
+    BirthDate= BirthDate + 5691,
+    StartDate= StartDate + 5691
+
+-- (296 filas afectadas)
+
+
+-- Actualiza la(s) fecha(s) de DimProduct.
+update DimProduct
+set StartDate= StartDate + 5691
+
+-- (606 filas afectadas)
+
+
+-- Actualiza la(s) fecha(s) de DimPromotion.
+update DimPromotion
+set StartDate= StartDate + 5691,
+    EndDate= EndDate + 5691
+
+-- (16 filas afectadas)
+
+
+
+
