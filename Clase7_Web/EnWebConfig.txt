@@ -1,0 +1,8 @@
+<!-- Estas instrucciones deben agregarse en Web.config, inmediatamente antes de 
+     </configuration>, para que no marque error al usar los controles de Login del IDE. -->
+
+  <appSettings>
+    <add key="ValidationSettings:UnobtrusiveValidationMode" value="None"/>
+  </appSettings>
+
+
