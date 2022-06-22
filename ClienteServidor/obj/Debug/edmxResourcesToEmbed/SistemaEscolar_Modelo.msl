@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SistemaEscolarModelStoreContainer" CdmEntityContainer="SistemaEscolarEntities">
+    <EntitySetMapping Name="Alum">
+      <EntityTypeMapping TypeName="SistemaEscolarModel.Alum">
+        <MappingFragment StoreEntitySet="Alum">
+          <ScalarProperty Name="CU" ColumnName="CU" />
+          <ScalarProperty Name="NomAl" ColumnName="NomAl" />
+          <ScalarProperty Name="Carr" ColumnName="Carr" />
+          <ScalarProperty Name="Prom" ColumnName="Prom" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Grupo">
+      <EntityTypeMapping TypeName="SistemaEscolarModel.Grupo">
+        <MappingFragment StoreEntitySet="Grupo">
+          <ScalarProperty Name="ClaveG" ColumnName="ClaveG" />
+          <ScalarProperty Name="Salón" ColumnName="Salón" />
+          <ScalarProperty Name="IdProf" ColumnName="IdProf" />
+          <ScalarProperty Name="ClaveM" ColumnName="ClaveM" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Historial">
+      <EntityTypeMapping TypeName="SistemaEscolarModel.Historial">
+        <MappingFragment StoreEntitySet="Historial">
+          <ScalarProperty Name="Folio" ColumnName="Folio" />
+          <ScalarProperty Name="Calif" ColumnName="Calif" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+          <ScalarProperty Name="CU" ColumnName="CU" />
+          <ScalarProperty Name="ClaveM" ColumnName="ClaveM" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Inscrito">
+      <EntityTypeMapping TypeName="SistemaEscolarModel.Inscrito">
+        <MappingFragment StoreEntitySet="Inscrito">
+          <ScalarProperty Name="CU" ColumnName="CU" />
+          <ScalarProperty Name="ClaveG" ColumnName="ClaveG" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Mater">
+      <EntityTypeMapping TypeName="SistemaEscolarModel.Mater">
+        <MappingFragment StoreEntitySet="Mater">
+          <ScalarProperty Name="ClaveM" ColumnName="ClaveM" />
+          <ScalarProperty Name="NomMat" ColumnName="NomMat" />
+          <ScalarProperty Name="Creds" ColumnName="Creds" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Prof">
+      <EntityTypeMapping TypeName="SistemaEscolarModel.Prof">
+        <MappingFragment StoreEntitySet="Prof">
+          <ScalarProperty Name="IdProf" ColumnName="IdProf" />
+          <ScalarProperty Name="NomProf" ColumnName="NomProf" />
+          <ScalarProperty Name="Categoría" ColumnName="Categoría" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
