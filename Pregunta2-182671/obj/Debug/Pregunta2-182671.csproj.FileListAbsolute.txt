@@ -1,0 +1,12 @@
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\bin\Debug\Pregunta2-182671.exe.config
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\bin\Debug\Pregunta2-182671.exe
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\bin\Debug\Pregunta2-182671.pdb
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\bin\Debug\GestorBD.dll
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\bin\Debug\GestorBD.pdb
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\obj\Debug\Pregunta2-182671.csprojAssemblyReference.cache
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\obj\Debug\Pregunta2_182671.Form1.resources
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\obj\Debug\Pregunta2_182671.Properties.Resources.resources
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\obj\Debug\Pregunta2-182671.csproj.GenerateResource.cache
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\obj\Debug\Pregunta2-182671.csproj.CopyComplete
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\obj\Debug\Pregunta2-182671.exe
+C:\Users\RPLAUCHUR\Documents\Bases\Pregunta2-182671\obj\Debug\Pregunta2-182671.pdb

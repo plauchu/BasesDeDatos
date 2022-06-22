@@ -1,0 +1,12 @@
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\obj\Debug\tareaBD.csprojAssemblyReference.cache
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\obj\Debug\tareaBD.frmQuery.resources
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\obj\Debug\tareaBD.Properties.Resources.resources
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\obj\Debug\tareaBD.csproj.GenerateResource.cache
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\bin\Debug\tareaBD.exe.config
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\bin\Debug\tareaBD.exe
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\bin\Debug\tareaBD.pdb
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\bin\Debug\GestorBD.dll
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\bin\Debug\GestorBD.pdb
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\obj\Debug\tareaBD.csproj.CopyComplete
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\obj\Debug\tareaBD.exe
+C:\Users\RPLAUCHUR\Documents\Bases\tareaBD\obj\Debug\tareaBD.pdb
