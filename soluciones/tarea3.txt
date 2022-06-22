@@ -1,0 +1,290 @@
+-- a)
+
+create or replace function cantArea (area char) return integer is
+  cantArea integer;
+begin 
+  select count(*) into cantArea
+  from carrera c, autor a, estudió e
+  where c.área = area and e.idCar = c.idCar and a.idA = e.idA;
+  return cantArea;
+end;
+
+create or replace 
+function cantAlumsArea(area char) return integer is
+  cant integer;
+begin
+  select count(idA) into cant
+  from  Estudió e, Carrera c
+  where e.idCar = c.idCar and área = area;
+  return cant;
+end;
+
+declare nom varchar(20);
+begin
+  nom:= 'Ingeniería';
+  dbms_output.put('Cantidad de egresados de ' || nom || ': ');
+  dbms_output.put_line(cantArea(nom));
+end;
+
+b)
+
+create or replace 
+procedure mayorYMenorArea (mayor out varchar, menor out varchar) is
+  ing int; admon int; soc int;
+begin
+  ing := cantAlumsArea('Ingeniería');
+  soc := cantAlumsArea('Sociales');
+  admon := cantAlumsArea('Administrativas');
+  if admon <= soc then
+    if admon <= ing then
+       menor := 'Administrativas';
+    else 
+       menor := 'Ingeniería';
+    end if;
+  else  
+    if ing <= soc then
+      menor := 'Ingeniería';
+    else 
+      menor := 'Sociales';
+    end if;
+  end if;
+  
+  if admon >= soc then
+    if admon >= ing then
+       mayor := 'Administrativas';
+    else 
+       mayor := 'Ingeniería';
+    end if;
+  else  
+    if ing >= soc then
+      mayor := 'Ingeniería';
+    else 
+      mayor := 'Sociales';
+    end if;
+  end if;
+end;
+
+--Ejecución
+declare
+mayor varchar(20); menor varchar (20);
+begin 
+  mayorYMenorArea(mayor, menor);
+  dbms_output.put_line('el area con mayor cantidad de alumnos es: ' || mayor); 
+  dbms_output.put_line('el area con menor cantidad de alumnos es: ' || menor);
+end;
+
+c)
+create or replace 
+procedure agregaOrganizó (nomOrg2 char, nomCon2 char, monto real) is
+  idOrg2 int; idCon2 int; aux1 int; aux2 int;
+begin
+  select count(idOrg) into aux1 from Organización where nomOrg = nomOrg2;
+  if aux1 > 0 then
+    select idOrg into idOrg2 from Organización where nomOrg = nomOrg2;
+  else
+    dbms_output.put_line('No se encontró tal organización en la base de datos.');
+  end if;
+  
+  select count(idCon) into aux2 from Concurso where nomCon = nomCon2;
+  if aux2 > 0 then
+    select idCon into idCon2 from Concurso where nomCon = nomCon2;
+  else
+    dbms_output.put_line('No se encontró tal concurso en la base de datos.');
+  end if;
+  
+  if aux1 > 0 and aux2 > 0 then
+    insert into Organizó values (idOrg2, idCon2, monto);
+    dbms_output.put_line('Alta exitosa en Organizó');
+  end if;
+end;
+
+--ejecucion
+begin
+  agregaOrganizó('ITAM', 'ANIEI 19', 10000);
+end;
+
+
+d)
+create or replace
+function mismasEmpresas (anio1 int, anio2 int) return string is
+emp1 varchar(20); 
+emp2 varchar(20);
+resp varchar(20);
+cursor q1 is 
+    select distinct idOrg 
+    from Organizó o, Concurso c 
+    where c.idCOn = o.idCon and extract( year from c.fechaIni) = anio1
+    order by idOrg;
+    
+cursor q2 is 
+    select distinct idOrg 
+    from Organizó o, Concurso c 
+    where c.idCOn = o.idCon and extract( year from c.fechaIni) = anio2
+    order by idOrg;
+    
+begin
+  resp:='Sí';
+  open q1; open q2;
+  loop
+    fetch q1 into emp1; exit when q1%notfound or resp = 'No';
+    loop
+      fetch q2 into emp2; exit when q2%notfound or emp2 = emp1;
+    end loop;
+    if emp1 <> emp2 then 
+        resp := 'No';
+    end if;
+  end loop;
+  close q1; close q2;
+  return resp;
+end;
+
+--ejecución
+declare 
+  a varchar(20);
+begin
+  a := mismasEmpresas(2018,2018);
+  dbms_output.put_line(a);
+  end;
+
+
+-- e)
+
+create or replace 
+trigger CambiaTesis
+  before update on tesis
+  for each row
+  begin
+    update Ganó g set g.idT= :new.idT
+      where g.idT= :old.idT;
+    dbms_output.put_line('También se cambió la clave de la tesis en Ganó');
+
+    update estudió e set e.idT= :new.idT 
+      where e.idT= :old.idT;
+    dbms_output.put_line('También se cambió la clave de la tesis en Estudió');
+  end;
+
+--Ejecución
+begin
+	update Tesis set idT = 10000 where idT = 150;
+end;
+
+-- f)
+
+create or replace
+trigger modificaIdOrg
+  before update on Organización
+  for each row 
+  when  (new.idOrg <> old.idOrg)
+  begin
+    update Organizó o set o.idOrg = :new.idOrg where o.idOrg = :old.idOrg;
+    
+    if :new.tipo = 'emp' then
+      update Empresa e set e.idOrg=:new.idOrg where e.idOrg = :old.idOrg;
+    else
+      update Escuela e set e.idOrg=:new.idOrg where e.idOrg = :old.idOrg;
+    end if;
+  end;
+  
+create or replace
+trigger modificaIdOrgEsc
+  before update on Escuela
+  for each row 
+  when  (new.idOrg <> old.idOrg)
+  begin
+    update Imparte i set i.idOrg = :new.idOrg where i.idOrg = :old.idOrg;
+  end;
+  
+  
+create or replace
+trigger modificaIdOrgImparte
+  before update on Imparte
+  for each row 
+  when  (new.idOrg <> old.idOrg)
+  begin
+    update Estudió e set e.idOrg = :new.idOrg where e.idOrg = :old.idOrg;
+  end;
+
+--Ejecución 
+update Organización set idOrg = 150 where idOrg = 1000
+
+-g)
+create or replace
+trigger muestraEmpresas
+after insert on Organizó
+
+declare
+  cursor emp is 
+    select nomOrg, sum(monto) as Total
+    from  Organizó o, Organización org
+    where o.idOrg = org.idOrg
+    group by nomOrg
+    order by nomOrg;
+begin 
+  for tuple in emp loop
+    dbms_output.put_line(tuple.nomOrg || ' ha aportado $' || tuple.Total);
+  end loop;
+end;
+
+--Ejecución
+insert into Organizó values (150, 101, 100000);
+
+h)
+create or replace
+procedure alumnosMismasMaterias (nom1 char, nom2 char, resp out int) is
+
+cant1 int; cant2 int; id1 int; id2 int;
+begin
+  cant1:=cantMatersAlum(nom1);
+  cant2:=cantMatersAlum(nom2);
+  if cant1 <> cant2 then
+    resp := 0;
+  else 
+    if cant1 = 0 then
+      resp := 2;
+    else
+        select cu into id1 from alum where nomAl = nom1;
+        select cu into id2 from alum where nomAl = nom2;
+        
+        declare
+        bandera boolean;
+        idM1 int; idM2 int;
+        cursor maters1 is select distinct claveM from Inscrito i, Grupo g
+                          where i.cu = id1 and i.claveG = g.claveG
+                          order by claveM;
+        cursor maters2 is select distinct claveM from Inscrito i, Grupo g
+                          where i.cu = id2 and i.claveG = g.claveG
+                          order by claveM;                 
+        begin 
+            open maters1; open maters2;
+            bandera := true;
+            while bandera = True loop
+              fetch maters1 into idM1; exit when maters1%notfound;
+              fetch maters2 into idM2; exit when maters2%notfound;
+              if idM1 <> idM2 then
+                bandera := False;
+              end if;
+            end loop;
+            close maters1; close maters2;
+        --asignamos a resp
+            if bandera = True then
+              resp := 1;
+            else
+              resp := 2;
+            end if;
+        end;
+      
+    end if;
+  end if;
+
+end;
+
+--ejecucion
+declare
+ resp int;
+begin
+  alumnosMismasMaterias('Ana', 'Ana', resp);
+  dbms_output.put_line(resp);
+  
+end;
+
+  

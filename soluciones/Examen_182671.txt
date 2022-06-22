@@ -1,0 +1,81 @@
+-- a)
+
+select m.nombre, p.folioP, p.fechaPed, c.cantidad
+from medicamento m, contiene c, pedido p
+where m.nombre like 'L%' and extract(month from p.fechaPed)=2 and extract(year from p.fechaPed)=2020
+	and m.idM = c.idM and c.FolioP = p.FolioP
+
+-- b)
+
+select nombre, domicilio
+from proveedor
+where idP not in
+	(select idP
+	from Proveedor, pedido p
+	where extract(month from p.fechaPed)=12 and extract(year from p.fechaPed)=2019
+	and idP = folioP)
+order by nombre desc;
+
+-- c)
+
+select nombre
+from proveedor, pedido 
+where idP = folioP
+having sum(montoTotal) > 200,000
+	Intersect
+select nombre
+from proveedor pr, pedido p, contiene c, medicamento m 
+where pr.idP = p.folioP and p.folioP = c.foliop and c.idM = m.idM
+	and m.Controlado = True
+
+-- d)
+
+select f.nombre "Menor cantidad de ventas"
+from farmacia f, compra c
+where f.idF = c.folioC
+group by idF
+having count(*) <= all
+		(select count(*)
+		from Compra
+		group by idF)
+
+-- e)
+
+create or replace trigger eliminaDescontinuados
+after insert on Medicamento
+for each row
+begin
+	if :new.Fechadescont is not null then 
+	   delete from Inventario i
+	    where old.idM = i.idM;
+end;
+
+-- f)
+
+create or replace procedure ActualizaInventario(folio int, fecha date) is
+exs int; tot int; id int;
+begin
+	-- tabla pedido
+	update Pedido p set p.FechaEnt:= fecha where p.Folio = folio;
+	-- tabla Inventario
+	(select cantidad into exs
+	from medicamento m, contiene c
+	where folio = c.foliop and c.idM = m.idM); 
+
+	(select existencias into tot
+	from inventario i, medicamento m, contiene c
+	where folio = c.foliop and c.idM = m.idM and m.idM = i.idM);
+
+tot:= tot + exs;
+
+	(select idM into id
+	from medicamento m, contiene c
+	where folio = c.foliop and c.idM = m.idM);
+	
+	update inventario i set i.existencias:= tot where i.idM = id;
+
+end;
+
+
+
+	

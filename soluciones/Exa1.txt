@@ -1,0 +1,71 @@
+--inciso a)
+
+select nombre 
+from Ayudante a
+where Rfca not in
+	(select Rfca
+	from AsignaAyud
+	where FechaIni = '26-02-2018' and FechaFin = '03-03-2018')
+order by nombre;
+
+-- inciso b)
+
+select idC, Placa
+from Camión c, tiradero t
+where t.nombre = 'Tiradero A' and c.idTir = t.idTir 
+union
+select idC, Placa
+from Camión c, Lugar l
+where l.esquina = 'Río Hondo' and l.idC = c.idC
+
+-- inciso c)
+
+select b.nombre, c.placa, count(*)
+from base b, camión c, lugar l
+where b.idB = c.idB and c.idC = l.idC
+group by nombre, placa
+having count (*) <= 20
+
+--inciso d)
+
+select nombre 
+from taller t, mant m 
+where t.idt = m.idt 
+group by idt 
+having count (*) <= all 
+	(select count(*)
+	from mant m 
+	group by idt)
+
+--inciso e)
+create or replace trigger InsertaMant
+before insert on Mant
+for each row
+begin
+	delete from AsignaAyud a
+	where old.idc = a.idc and a.FechaIni between :new.FechaIni and :new.FechaFin
+	
+	delete from AsignaCh a
+	where old.idc = a.idc and a.FechaIni between :new.FechaIni and :new.FechaFin
+end;
+--inciso f)
+create or replace procedure ActualizaMant(placa1 char, nomTaller char, fechaProb date) is
+cantMant int; costoTotal int; nuevoIdM int; tall int; cam int;
+begin
+	
+	if sysdate > fechaProb then
+		select idM into nuevoIdM from Mant where idM >= all (select idM from Mant);
+		nuevoIdM := nuevoIdM + 1;
+		select idT into tall from Taller where nombre = nomTaller;
+		select idC into cam from Camión where placa = placa1;
+		insert into Mant values(nuevoIdM, sysdate, fechaProb, 0, tall, cam); 
+
+		select count(*) into cantMant from Mant where idC = cam;
+		select sum(costo) into costoTotal from Mant where idC = cam;
+		dbms_output.put_line('Placa: '|| placa1);
+		dbms_output.put_line('Ha estado en mantenimiento: '|| cantMant || ' veces');
+		dbms_output.put_line('Y ha costado: '|| costoTotal || ' pesos');
+	end if;
+end
+
+

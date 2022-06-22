@@ -1,0 +1,147 @@
+-- a)
+
+select NomOrg, NomCar, NomA
+from Organización o, Carrera c, Autor a, imparte im, estudió es
+where c.área = 'Ingeniería' and o.idOrg = im.idOrg and c.idCar = im.idCar
+and a.idA = es.IdA and o.idOrg = es.IdOrg and es.idcar = im.idcar
+
+-- b)
+
+select nomT
+from Tesis t, Concurso con, Ganó g
+where t.idT = g.idT and g.idCon = con.idCon 
+  and con.Fechaini >= '01/01/19' and con.FechaFin <= '31/12/19'
+order by con.nomcon desc, t.nomt asc
+
+-- c)
+
+select NomOrg, monto
+from organización o, Organizó org, concurso con
+where o.idOrg = org.idOrg and org.idCon = con.idcon
+  and org.monto >= 40000
+order by FechaIni, monto desc
+
+-- d)
+
+select nomCar, NomOrg
+from Organización o, imparte im, Carrera c
+where o.idOrg = im.idOrg and im.idcar = c.idCar 
+and c.nomCar like 'Lic%'
+
+-- e)
+
+select NomCon, extract(year from FechaIni) Año
+from concurso
+minus
+select distinct NomCon, extract(year from FechaIni) Año
+from Concurso con, Organización o, estudió es, tesis t, ganó g
+where o.IdOrg = 150 and es.idOrg = o.idOrg and es.idT = t.idT
+  and t.idt = g.idt and g.idcon = con.idcon
+order by año asc
+
+-- f)
+
+select NomT, NomA
+from Autor a, Tesis t, Ganó g, Concurso c, Estudió e, organizó o, organización org
+where a.idA = e.idA and e.idT = t.idT and t.idT = g.idT and g.idCon = c.idCon
+  and c.idCon = o.idCon and o.idOrg = org.idOrg and NomOrg = 'BANAMEX'
+      Intersect
+select NomT, NomA
+from Autor a, Tesis t, Ganó g, Concurso c, Estudió e, organizó o, organización org
+where a.idA = e.idA and e.idT = t.idT and t.idT = g.idT and g.idCon = c.idCon
+  and c.idCon = o.idCon and o.idOrg = org.idOrg and NomOrg = 'AMIME'
+
+-- g)
+
+select NomA, NomCar
+from Autor a, estudió e, Carrera c, Tesis t, Ganó g, concurso co
+where a.idA = e.idA and e.idCar = c.idCar and e.idT = t.idT
+  and t.idT = g.idT and g.idCon = co.idCon
+  and extract(year from FechaIni)=extract(year from sysdate)-1
+      Intersect
+select NomA, NomCar
+from Autor a, estudió e, Carrera c, Tesis t, Ganó g, concurso co
+where a.idA = e.idA and e.idCar = c.idCar and e.idT = t.idT
+  and t.idT = g.idT and g.idCon = co.idCon
+  and extract(year from FechaIni)=extract(year from sysdate)
+
+-- h)
+
+select NomA
+from Autor a, estudió es, Carrera c
+where a.idA = es.idA and es.idCar = c.idCar and c.Área = 'Administrativas'
+union
+        (select NomA
+        from Autor a, Estudió es, Tesis t, Ganó g, Concurso c
+        where a.idA = es.idA and es.idT = t.idT and t.idT = g.idT 
+        and g.idCon = c. idCon 
+        and extract(year from FechaIni)=extract(year from sysdate))
+
+-- i) 
+
+select NomOrg, extract(year from FechaIni) Año, count(*)
+from Organización o, organizó org, Concurso c
+where o.idOrg = org.idOrg and org.idCon = c.idCon
+group by NomOrg, extract(year from FechaIni)
+
+-- j)
+
+select distinct NomOrg
+from Organización o, estudió es, autor a
+where o.idOrg = es.idOrg and a.idA = es.idA
+and a.idA in
+      (select au.idA
+       from Autor au, Organización o, Estudió es, Tesis t, ganó g, concurso co
+       where au.idA = es.idA and o.idOrg = es.idOrg and es.idT = t.idT and t.idT = g.idT 
+        and g.idCon = co.idCon
+       group by au.idA
+       having count (*) > 2)
+
+k) 
+select nomCon, nomOrg from Concurso c, Organizó o, Organización org
+where c.idCon = o.idCon and o.idOrg = org.idOrg and 
+	nomCon in (select nomCon from Concurso c, Organizó o
+			where c.idCon = o.idCon 
+			group by nomCon having sum(monto) >= 100000)
+order by nomCon asc, nomOrg desc
+
+l)
+select nomA, nomT from Autor a, Estudió e, Tesis t
+where a.idA = e.idA and e.idT = t.idT and nomA in 
+(select nomA from Autor a, Estudió e, Tesis t, Ganó g, Concurso c
+where a.idA = e.idA and e.idT = t.idT and g.idT = t.idT and g.idCon = c.idCon
+	and g.lugar = 1 and extract(year from c.FechaIni) = extract(year from sysdate)-1
+	group by(a.nomA) 
+	having count(c.idCon) = 1)
+
+m)
+select nomOrg from Organización org, Organizó o
+where org.idOrg = o.idOrg
+group by (nomOrg)
+having count(idCon) >= all(select count(idCon) from Organización org, Organizó o
+			where org.idOrg = o.idOrg
+			group by (nomOrg) )
+
+n) select  nomCar from Carrera c, Estudió e, Ganó g
+	where c.idCar = e.idCar and e.idT = g.idT
+	group by nomCar
+	having count(distinct idCon) <= all(select count(distinct idCon) 
+					from Carrera c, Estudió e, Ganó g
+					where c.idCar = e.idCar and e.idT = g.idT
+					group by nomCar)
+
+o)select nomT, nomA from Tesis t, Estudió e, Autor a
+	where a.idA = e.idA and e.idT = t.idT and 
+	t.idT in (select t.idT from Tesis t, Ganó g where t.idT = g.idT 
+		group by t.idT
+		having count(distinct idCon) >= all (select count(distinct idCon)
+						     from Tesis t, Ganó g where t.idT = g.idT
+ 						     group by t.idT
+						     )
+		)
+
+p)
+select nomOrg from Organización org, Organizó o
+	where org.idOrg = o.idOrg
+	group by(nomOrg)
+	having count(idCon) = (select count(*) from Concurso)

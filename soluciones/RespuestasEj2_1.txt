@@ -1,0 +1,108 @@
+-- Respuestas ej. 2.1
+
+-- a: diferencia en SQL estándar.
+select nomprof, categoría
+from prof
+where idprof not in
+	(select idprof
+	from grupo)
+
+-- En Oracle
+select nomprof, categoría
+from prof
+  minus
+select nomprof, categoría
+from prof p, grupo g
+where p.idprof=g.idprof
+
+
+-- b
+select nommat, avg(calif) "Promedio"
+from mater m, historial h
+where calif>=6 and 
+  extract(year from fecha)=extract(year from sysdate)-1 and
+  m.clavem=h.clavem
+group by nommat
+
+
+-- c
+select nommat, count(distinct calif)
+from mater m, historial h
+where m.clavem=h.clavem
+group by nommat
+having count(distinct calif)>2
+
+
+-- d
+select nomal
+from alum a, historial h, mater m
+where nommat like 'Algo%' and 
+  a.cu=h.cu and h.clavem=m.clavem
+	intersect
+select nomal
+from alum a, historial h, mater m
+where nommat = 'Economía I' and 
+  a.cu=h.cu and h.clavem=m.clavem
+
+
+-- f
+select carr, nommat, count(*)
+from alum a, historial h, mater m
+where extract(year from fecha)=2019 and
+  a.cu=h.cu and h.clavem=m.clavem
+group by carr, nommat
+order by carr
+
+-- g
+select nommat, nomal
+from mater m, grupo g, inscrito i, alum a
+where m.clavem=g.clavem and g.claveg=i.claveg and i.cu=a.cu
+  and nommat in
+	(select nommat
+	from mater m, grupo g, inscrito i
+	where m.clavem=g.clavem and g.claveg=i.claveg
+	group by nommat
+	having count(*)<=3)
+order by nommat
+
+-- h: Consulta de división.
+select NomMat
+from mater m, Grupo g, Inscrito i, Alum a
+where m.clavem=g.clavem and g.ClaveG=i.ClaveG and i.CU=a.CU
+group by NomMat
+having count(distinct Carr) in
+	(select count(distinct Carr)
+	from Alum)
+
+-- j
+select nomal, prom
+from alum
+where prom >all (select avg(prom) from alum)
+
+-- k
+select nommat, nomal
+from mater m, grupo g, inscrito i, alum a
+where m.clavem=g.clavem and g.claveg=i.claveg and i.cu=a.cu
+and a.cu in
+	(select cu
+	from inscrito
+	group by cu
+	having count(*) >= all
+		(select count(*)
+		from inscrito
+		group by cu))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
