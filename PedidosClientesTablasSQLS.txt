@@ -1,0 +1,81 @@
+-- Tablas de la base de datos de Pedidos-Clientes (SQL Server).
+
+-- Tabla de artículos.
+
+create table Artículos
+(IdArt	int 	primary key,
+Nombre	varchar(30),
+Precio	money,
+CantAct	int,
+CantMin	int,
+CantPedir int);
+
+
+-- Tabla de re-abastecimiento de artículos.
+
+create table ReAbast
+(FolioR	int	primary key,
+Cant	int,
+Monto	money,
+FechaPed date,
+FechaEnt date,
+IdArt	int	references Artículos not null);
+
+
+-- Tabla de usuarios.
+
+create table Usuarios
+(Rfc	char(13)  primary key,
+Nombre	varchar(30),
+Passw	varchar(15),
+Tipo	varchar(10)  check (Tipo in ('Cli','Emp','Ger')));
+
+
+-- Tabla de clientes.
+
+create table Clientes
+(RFC	char(13)  primary key references Usuarios,
+Domicilio varchar(50));
+
+
+-- Tabla de empleados.
+
+create table Empleados
+(RFC	char(13)  primary key references Usuarios,
+Categoría varchar(10));
+
+
+-- Tabla de pedidos.
+
+create table Pedidos
+(FolioP	int	primary key,
+FechaPed date,
+FechaFin date,
+Monto money,
+SaldoCli money,
+SaldoFacs money,
+RFCC	char(13) references Clientes not null,
+RFCE	char(13) references Empleados);
+
+
+-- Tabla de detalle de los pedidos.
+
+create table Detalle
+(FolioP	int	References Pedidos,
+IdArt	int	references Artículos,
+	primary key (FolioP,IdArt),
+CantPed	int,
+CantEnt	int);
+
+
+-- Tabla de pagos de los clientes.
+
+create table Pagos
+(FolioP	int	references Pedidos,
+IdPago	int,
+	primary key (FolioP,IdPago),
+Fecha	date,
+Monto	money);
+
+
+
