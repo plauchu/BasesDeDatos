@@ -1,0 +1,426 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SistemaEscolarModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Alum">
+          <Key>
+            <PropertyRef Name="CU" />
+          </Key>
+          <Property Name="CU" Type="smallint" Nullable="false" />
+          <Property Name="NomAl" Type="char" MaxLength="30" />
+          <Property Name="Carr" Type="char" MaxLength="3" />
+          <Property Name="Prom" Type="real" />
+        </EntityType>
+        <EntityType Name="Grupo">
+          <Key>
+            <PropertyRef Name="ClaveG" />
+          </Key>
+          <Property Name="ClaveG" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="Salón" Type="char" MaxLength="8" />
+          <Property Name="IdProf" Type="smallint" />
+          <Property Name="ClaveM" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Historial">
+          <Key>
+            <PropertyRef Name="Folio" />
+          </Key>
+          <Property Name="Folio" Type="int" Nullable="false" />
+          <Property Name="Calif" Type="smallint" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="CU" Type="smallint" Nullable="false" />
+          <Property Name="ClaveM" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Inscrito">
+          <Key>
+            <PropertyRef Name="CU" />
+            <PropertyRef Name="ClaveG" />
+          </Key>
+          <Property Name="CU" Type="smallint" Nullable="false" />
+          <Property Name="ClaveG" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="Fecha" Type="date" />
+        </EntityType>
+        <EntityType Name="Mater">
+          <Key>
+            <PropertyRef Name="ClaveM" />
+          </Key>
+          <Property Name="ClaveM" Type="smallint" Nullable="false" />
+          <Property Name="NomMat" Type="char" MaxLength="30" />
+          <Property Name="Creds" Type="smallint" />
+        </EntityType>
+        <EntityType Name="Prof">
+          <Key>
+            <PropertyRef Name="IdProf" />
+          </Key>
+          <Property Name="IdProf" Type="smallint" Nullable="false" />
+          <Property Name="NomProf" Type="char" MaxLength="30" />
+          <Property Name="Categoría" Type="char" MaxLength="2" />
+        </EntityType>
+        <Association Name="FK__Grupo__ClaveM__1BFD2C07">
+          <End Role="Mater" Type="Self.Mater" Multiplicity="1" />
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mater">
+              <PropertyRef Name="ClaveM" />
+            </Principal>
+            <Dependent Role="Grupo">
+              <PropertyRef Name="ClaveM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Grupo__IdProf__1B0907CE">
+          <End Role="Prof" Type="Self.Prof" Multiplicity="0..1" />
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Prof">
+              <PropertyRef Name="IdProf" />
+            </Principal>
+            <Dependent Role="Grupo">
+              <PropertyRef Name="IdProf" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__Clave__25869641">
+          <End Role="Mater" Type="Self.Mater" Multiplicity="1" />
+          <End Role="Historial" Type="Self.Historial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mater">
+              <PropertyRef Name="ClaveM" />
+            </Principal>
+            <Dependent Role="Historial">
+              <PropertyRef Name="ClaveM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__CU__24927208">
+          <End Role="Alum" Type="Self.Alum" Multiplicity="1" />
+          <End Role="Historial" Type="Self.Historial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alum">
+              <PropertyRef Name="CU" />
+            </Principal>
+            <Dependent Role="Historial">
+              <PropertyRef Name="CU" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Inscrito__ClaveG__1FCDBCEB">
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="1" />
+          <End Role="Inscrito" Type="Self.Inscrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo">
+              <PropertyRef Name="ClaveG" />
+            </Principal>
+            <Dependent Role="Inscrito">
+              <PropertyRef Name="ClaveG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Inscrito__CU__1ED998B2">
+          <End Role="Alum" Type="Self.Alum" Multiplicity="1" />
+          <End Role="Inscrito" Type="Self.Inscrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alum">
+              <PropertyRef Name="CU" />
+            </Principal>
+            <Dependent Role="Inscrito">
+              <PropertyRef Name="CU" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SistemaEscolarModelStoreContainer">
+          <EntitySet Name="Alum" EntityType="Self.Alum" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Historial" EntityType="Self.Historial" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Inscrito" EntityType="Self.Inscrito" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mater" EntityType="Self.Mater" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Prof" EntityType="Self.Prof" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Grupo__ClaveM__1BFD2C07" Association="Self.FK__Grupo__ClaveM__1BFD2C07">
+            <End Role="Mater" EntitySet="Mater" />
+            <End Role="Grupo" EntitySet="Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Grupo__IdProf__1B0907CE" Association="Self.FK__Grupo__IdProf__1B0907CE">
+            <End Role="Prof" EntitySet="Prof" />
+            <End Role="Grupo" EntitySet="Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__Clave__25869641" Association="Self.FK__Historial__Clave__25869641">
+            <End Role="Mater" EntitySet="Mater" />
+            <End Role="Historial" EntitySet="Historial" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__CU__24927208" Association="Self.FK__Historial__CU__24927208">
+            <End Role="Alum" EntitySet="Alum" />
+            <End Role="Historial" EntitySet="Historial" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Inscrito__ClaveG__1FCDBCEB" Association="Self.FK__Inscrito__ClaveG__1FCDBCEB">
+            <End Role="Grupo" EntitySet="Grupo" />
+            <End Role="Inscrito" EntitySet="Inscrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Inscrito__CU__1ED998B2" Association="Self.FK__Inscrito__CU__1ED998B2">
+            <End Role="Alum" EntitySet="Alum" />
+            <End Role="Inscrito" EntitySet="Inscrito" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SistemaEscolarModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Alum">
+          <Key>
+            <PropertyRef Name="CU" />
+          </Key>
+          <Property Name="CU" Type="Int16" Nullable="false" />
+          <Property Name="NomAl" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="Carr" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="Prom" Type="Single" />
+          <NavigationProperty Name="Historial" Relationship="Self.FK__Historial__CU__24927208" FromRole="Alum" ToRole="Historial" />
+          <NavigationProperty Name="Inscrito" Relationship="Self.FK__Inscrito__CU__1ED998B2" FromRole="Alum" ToRole="Inscrito" />
+        </EntityType>
+        <EntityType Name="Grupo">
+          <Key>
+            <PropertyRef Name="ClaveG" />
+          </Key>
+          <Property Name="ClaveG" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Salón" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="IdProf" Type="Int16" />
+          <Property Name="ClaveM" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Mater" Relationship="Self.FK__Grupo__ClaveM__1BFD2C07" FromRole="Grupo" ToRole="Mater" />
+          <NavigationProperty Name="Prof" Relationship="Self.FK__Grupo__IdProf__1B0907CE" FromRole="Grupo" ToRole="Prof" />
+          <NavigationProperty Name="Inscrito" Relationship="Self.FK__Inscrito__ClaveG__1FCDBCEB" FromRole="Grupo" ToRole="Inscrito" />
+        </EntityType>
+        <EntityType Name="Historial">
+          <Key>
+            <PropertyRef Name="Folio" />
+          </Key>
+          <Property Name="Folio" Type="Int32" Nullable="false" />
+          <Property Name="Calif" Type="Int16" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="CU" Type="Int16" Nullable="false" />
+          <Property Name="ClaveM" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Alum" Relationship="Self.FK__Historial__CU__24927208" FromRole="Historial" ToRole="Alum" />
+          <NavigationProperty Name="Mater" Relationship="Self.FK__Historial__Clave__25869641" FromRole="Historial" ToRole="Mater" />
+        </EntityType>
+        <EntityType Name="Inscrito">
+          <Key>
+            <PropertyRef Name="CU" />
+            <PropertyRef Name="ClaveG" />
+          </Key>
+          <Property Name="CU" Type="Int16" Nullable="false" />
+          <Property Name="ClaveG" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Alum" Relationship="Self.FK__Inscrito__CU__1ED998B2" FromRole="Inscrito" ToRole="Alum" />
+          <NavigationProperty Name="Grupo" Relationship="Self.FK__Inscrito__ClaveG__1FCDBCEB" FromRole="Inscrito" ToRole="Grupo" />
+        </EntityType>
+        <EntityType Name="Mater">
+          <Key>
+            <PropertyRef Name="ClaveM" />
+          </Key>
+          <Property Name="ClaveM" Type="Int16" Nullable="false" />
+          <Property Name="NomMat" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="Creds" Type="Int16" />
+          <NavigationProperty Name="Grupo" Relationship="Self.FK__Grupo__ClaveM__1BFD2C07" FromRole="Mater" ToRole="Grupo" />
+          <NavigationProperty Name="Historial" Relationship="Self.FK__Historial__Clave__25869641" FromRole="Mater" ToRole="Historial" />
+        </EntityType>
+        <EntityType Name="Prof">
+          <Key>
+            <PropertyRef Name="IdProf" />
+          </Key>
+          <Property Name="IdProf" Type="Int16" Nullable="false" />
+          <Property Name="NomProf" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="Categoría" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Grupo" Relationship="Self.FK__Grupo__IdProf__1B0907CE" FromRole="Prof" ToRole="Grupo" />
+        </EntityType>
+        <Association Name="FK__Historial__CU__24927208">
+          <End Role="Alum" Type="Self.Alum" Multiplicity="1" />
+          <End Role="Historial" Type="Self.Historial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alum">
+              <PropertyRef Name="CU" />
+            </Principal>
+            <Dependent Role="Historial">
+              <PropertyRef Name="CU" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Inscrito__CU__1ED998B2">
+          <End Role="Alum" Type="Self.Alum" Multiplicity="1" />
+          <End Role="Inscrito" Type="Self.Inscrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alum">
+              <PropertyRef Name="CU" />
+            </Principal>
+            <Dependent Role="Inscrito">
+              <PropertyRef Name="CU" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Grupo__ClaveM__1BFD2C07">
+          <End Role="Mater" Type="Self.Mater" Multiplicity="1" />
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mater">
+              <PropertyRef Name="ClaveM" />
+            </Principal>
+            <Dependent Role="Grupo">
+              <PropertyRef Name="ClaveM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Grupo__IdProf__1B0907CE">
+          <End Role="Prof" Type="Self.Prof" Multiplicity="0..1" />
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Prof">
+              <PropertyRef Name="IdProf" />
+            </Principal>
+            <Dependent Role="Grupo">
+              <PropertyRef Name="IdProf" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Inscrito__ClaveG__1FCDBCEB">
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="1" />
+          <End Role="Inscrito" Type="Self.Inscrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo">
+              <PropertyRef Name="ClaveG" />
+            </Principal>
+            <Dependent Role="Inscrito">
+              <PropertyRef Name="ClaveG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Historial__Clave__25869641">
+          <End Role="Mater" Type="Self.Mater" Multiplicity="1" />
+          <End Role="Historial" Type="Self.Historial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mater">
+              <PropertyRef Name="ClaveM" />
+            </Principal>
+            <Dependent Role="Historial">
+              <PropertyRef Name="ClaveM" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SistemaEscolarEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Alum" EntityType="Self.Alum" />
+          <EntitySet Name="Grupo" EntityType="Self.Grupo" />
+          <EntitySet Name="Historial" EntityType="Self.Historial" />
+          <EntitySet Name="Inscrito" EntityType="Self.Inscrito" />
+          <EntitySet Name="Mater" EntityType="Self.Mater" />
+          <EntitySet Name="Prof" EntityType="Self.Prof" />
+          <AssociationSet Name="FK__Historial__CU__24927208" Association="Self.FK__Historial__CU__24927208">
+            <End Role="Alum" EntitySet="Alum" />
+            <End Role="Historial" EntitySet="Historial" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Inscrito__CU__1ED998B2" Association="Self.FK__Inscrito__CU__1ED998B2">
+            <End Role="Alum" EntitySet="Alum" />
+            <End Role="Inscrito" EntitySet="Inscrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Grupo__ClaveM__1BFD2C07" Association="Self.FK__Grupo__ClaveM__1BFD2C07">
+            <End Role="Mater" EntitySet="Mater" />
+            <End Role="Grupo" EntitySet="Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Grupo__IdProf__1B0907CE" Association="Self.FK__Grupo__IdProf__1B0907CE">
+            <End Role="Prof" EntitySet="Prof" />
+            <End Role="Grupo" EntitySet="Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Inscrito__ClaveG__1FCDBCEB" Association="Self.FK__Inscrito__ClaveG__1FCDBCEB">
+            <End Role="Grupo" EntitySet="Grupo" />
+            <End Role="Inscrito" EntitySet="Inscrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Historial__Clave__25869641" Association="Self.FK__Historial__Clave__25869641">
+            <End Role="Mater" EntitySet="Mater" />
+            <End Role="Historial" EntitySet="Historial" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SistemaEscolarModelStoreContainer" CdmEntityContainer="SistemaEscolarEntities">
+          <EntitySetMapping Name="Alum">
+            <EntityTypeMapping TypeName="SistemaEscolarModel.Alum">
+              <MappingFragment StoreEntitySet="Alum">
+                <ScalarProperty Name="CU" ColumnName="CU" />
+                <ScalarProperty Name="NomAl" ColumnName="NomAl" />
+                <ScalarProperty Name="Carr" ColumnName="Carr" />
+                <ScalarProperty Name="Prom" ColumnName="Prom" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Grupo">
+            <EntityTypeMapping TypeName="SistemaEscolarModel.Grupo">
+              <MappingFragment StoreEntitySet="Grupo">
+                <ScalarProperty Name="ClaveG" ColumnName="ClaveG" />
+                <ScalarProperty Name="Salón" ColumnName="Salón" />
+                <ScalarProperty Name="IdProf" ColumnName="IdProf" />
+                <ScalarProperty Name="ClaveM" ColumnName="ClaveM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Historial">
+            <EntityTypeMapping TypeName="SistemaEscolarModel.Historial">
+              <MappingFragment StoreEntitySet="Historial">
+                <ScalarProperty Name="Folio" ColumnName="Folio" />
+                <ScalarProperty Name="Calif" ColumnName="Calif" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="CU" ColumnName="CU" />
+                <ScalarProperty Name="ClaveM" ColumnName="ClaveM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Inscrito">
+            <EntityTypeMapping TypeName="SistemaEscolarModel.Inscrito">
+              <MappingFragment StoreEntitySet="Inscrito">
+                <ScalarProperty Name="CU" ColumnName="CU" />
+                <ScalarProperty Name="ClaveG" ColumnName="ClaveG" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mater">
+            <EntityTypeMapping TypeName="SistemaEscolarModel.Mater">
+              <MappingFragment StoreEntitySet="Mater">
+                <ScalarProperty Name="ClaveM" ColumnName="ClaveM" />
+                <ScalarProperty Name="NomMat" ColumnName="NomMat" />
+                <ScalarProperty Name="Creds" ColumnName="Creds" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Prof">
+            <EntityTypeMapping TypeName="SistemaEscolarModel.Prof">
+              <MappingFragment StoreEntitySet="Prof">
+                <ScalarProperty Name="IdProf" ColumnName="IdProf" />
+                <ScalarProperty Name="NomProf" ColumnName="NomProf" />
+                <ScalarProperty Name="Categoría" ColumnName="Categoría" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

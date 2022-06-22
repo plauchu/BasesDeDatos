@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5bcde62fb5c54a5a9c598bc8a014a5a6" Name="Diagram1">
+        <EntityTypeShape EntityType="SistemaEscolarModel.Alum" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaEscolarModel.Grupo" Width="1.5" PointX="2.875" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaEscolarModel.Historial" Width="1.5" PointX="3.125" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaEscolarModel.Inscrito" Width="1.5" PointX="2" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaEscolarModel.Mater" Width="1.5" PointX="5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaEscolarModel.Prof" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <AssociationConnector Association="SistemaEscolarModel.FK__Historial__CU__24927208" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaEscolarModel.FK__Inscrito__CU__1ED998B2" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaEscolarModel.FK__Grupo__ClaveM__1BFD2C07" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaEscolarModel.FK__Grupo__IdProf__1B0907CE" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaEscolarModel.FK__Inscrito__ClaveG__1FCDBCEB" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaEscolarModel.FK__Historial__Clave__25869641" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
